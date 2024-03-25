@@ -22,9 +22,9 @@ export const EmailList = () => {
           key={email.from}
           className="flex justify-between py-3 gap-4"
         >
-          <div className="font-medium">{email.from}</div>
-          <div>{email.subject}</div>
-          <div>{email.date}</div>
+          <div className="font-medium hidden md:block">{email.from}</div>
+          <div className="">{email.subject}</div>
+          <div className="hidden md:block">{email.date}</div>
         </Link>
       ))}
     </div>

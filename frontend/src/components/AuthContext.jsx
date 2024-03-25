@@ -1,8 +1,9 @@
 import { createContext, useEffect, useState } from "react"
 
 export const AuthContext = createContext({
-  initialLoading: true,
-  user: null
+  user: null,
+  setUser: null,
+  initialLoading: true
 })
 
 export const AuthContextProvider = ({ children }) => {
@@ -21,21 +22,6 @@ export const AuthContextProvider = ({ children }) => {
     }
 
     checkStatus()
-
-    // const logoutInterceptor =
-    //   axiosInterceptorsInstance.interceptors.response.use(
-    //     (response) => response,
-    //     (error) => {
-    //       if (error.response?.status === 401) {
-    //         window.location.href = "/login"
-    //       }
-    //       return Promise.reject(error)
-    //     }
-    //   )
-
-    // return () => {
-    //   axiosInterceptorsInstance.interceptors.response.eject(logoutInterceptor)
-    // }
   }, [])
 
   return (

@@ -1,7 +1,7 @@
 export const Email = () => {
   return (
     <div>
-      <ul className="py-4 border-b flex flex-col gap-2">
+      <ul className="pb-4 border-b flex flex-col gap-2">
         <li>
           <span className="font-bold">From:</span> <span>foo@example.com</span>
         </li>
