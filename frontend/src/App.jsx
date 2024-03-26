@@ -34,7 +34,15 @@ const ProtectedRoute = () => {
 const RedirectIfLoggedIn = () => {
   const { user, initialLoading } = useContext(AuthContext)
 
-  return !initialLoading && user ? <Navigate to="/inbox" /> : <Outlet />
+  if (!initialLoading) {
+    if (user) {
+      return <Navigate to="/inbox" />
+    } else {
+      return <Outlet />
+    }
+  } else {
+    return null
+  }
 }
 
 const router = createBrowserRouter(

@@ -2,6 +2,7 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom"
 import { useContext } from "react"
 import { AuthContext } from "../components/AuthContext"
 import { Button } from "../components/ui/button"
+import { Skeleton } from "../components/ui/skeleton"
 import { axiosInstance } from "../lib/axiosInstance"
 import archivedIcon from "../assets/archived.svg"
 import composeIcon from "../assets/compose.svg"
@@ -24,7 +25,14 @@ export const RootLayout = () => {
   return (
     <div className="max-w-4xl mx-auto px-4">
       <header className="flex justify-between items-center border-b gap-2 py-4">
-        {!initialLoading && user ? (
+        <span className="text-2xl hidden md:inline-block">📮 Mail</span>
+        {initialLoading ? (
+          <div className="flex w-full md:w-auto justify-evenly gap-4 md:ml-auto">
+            <Skeleton className="h-4 w-[80px]" />
+            <Skeleton className="h-4 w-[80px]" />
+            <Skeleton className="h-4 w-[80px]" />
+          </div>
+        ) : user ? (
           <>
             <ul className="flex gap-2">
               <li>
