@@ -3,13 +3,22 @@ import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 import session from "express-session"
 import MongoStore from "connect-mongo"
+import cors from "cors"
 
 import { Email, User } from "./models.js"
 
 const app = express()
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true
+  })
+)
+
 app.use(express.json())
 
-sessionRouter.use(
+app.use(
   session({
     secret: "super secret",
     resave: false,
@@ -19,7 +28,6 @@ sessionRouter.use(
       sameSite: true,
       resave: false,
       saveUninitialized: false,
-      secure: true
     },
     store: MongoStore.create({
       mongoUrl: "mongodb://127.0.0.1:27017/mail"
@@ -43,13 +51,12 @@ app.get("/user/status", protectRoute, async (req, res) => {
 })
 
 app.post("/user/register", async (req, res) => {
-  const registerValues = req.body
+  const { email, password } = req.body
 
-  const hashedPassword = await bcrypt.hash(registerValues.password, 8)
+  const hashedPassword = await bcrypt.hash(password, 8)
 
   const newUser = await User.create({
-    username: registerValues.username,
-    email: registerValues.email,
+    email: email,
     password: hashedPassword
   })
 
@@ -76,7 +83,7 @@ app.post("/user/login", async (req, res) => {
 app.delete("/user/logout", async (req, res) => {
   req.session.destroy()
   res.clearCookie("connect.sid")
-  res.json({ message: "Logged out" })
+  res.sendStatus(204)
 })
 
 app.post("/emails", async (req, res) => {

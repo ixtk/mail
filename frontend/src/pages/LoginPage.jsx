@@ -1,6 +1,6 @@
 import { Form, Formik, ErrorMessage, Field } from "formik"
 import { Link } from "react-router-dom"
-// import { axiosInstance } from "../axiosInstance"
+import { axiosInstance } from "../lib/axiosInstance"
 import { useContext } from "react"
 import { AuthContext } from "../components/AuthContext"
 import { Button } from "../components/ui/button"
@@ -12,24 +12,18 @@ export const LoginPage = () => {
     email: "",
     password: ""
   }
-  const { authState, setAuthState } = useContext(AuthContext)
+  const { setUser } = useContext(AuthContext)
 
   const loginUser = async (loginValues, { setSubmitting }) => {
-    // const response = await axiosInstance.post("/user/login", loginValues)
-    // setAuthState({
-    //   ...authState,
-    //   user: response.data.user
-    // })
-    // console.log(response.data)
+    const response = await axiosInstance.post("/user/login", loginValues)
+    setUser(response.data.user)
+    setSubmitting(false)
+    console.log(response.data)
   }
 
   return (
     <div className="max-w-xs mx-auto my-4 flex flex-col gap-4">
-      <Formik
-        initialValues={initialValues}
-        onSubmit={loginUser}
-        // validationSchema={loginSchema}
-      >
+      <Formik initialValues={initialValues} onSubmit={loginUser}>
         {(formikProps) => {
           return (
             <Form className="flex flex-col gap-4">

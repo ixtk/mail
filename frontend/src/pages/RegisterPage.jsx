@@ -1,6 +1,6 @@
 import { Form, Formik, ErrorMessage, Field } from "formik"
-import { Link } from "react-router-dom"
-// import { axiosInstance } from "../axiosInstance"
+import { Link, useNavigate } from "react-router-dom"
+import { axiosInstance } from "../lib/axiosInstance"
 import { useContext } from "react"
 import { AuthContext } from "../components/AuthContext"
 import { Button } from "../components/ui/button"
@@ -14,20 +14,19 @@ export const RegisterPage = () => {
     confirmPassword: ""
   }
 
-  const { authState, setAuthState } = useContext(AuthContext)
+  const { setUser } = useContext(AuthContext)
+  const navigate = useNavigate()
 
-  const loginUser = async (loginValues, { setSubmitting }) => {
-    // const response = await axiosInstance.post("/user/login", loginValues)
-    // setAuthState({
-    //   ...authState,
-    //   user: response.data.user
-    // })
-    // console.log(response.data)
+  const registerUser = async (registerValues) => {
+    const response = await axiosInstance.post("/user/register", registerValues)
+    setUser(response.data.user)
+    navigate("/inbox")
+    console.log(response.data)
   }
 
   return (
     <div className="max-w-xs mx-auto my-4">
-      <Formik initialValues={initialValues}>
+      <Formik initialValues={initialValues} onSubmit={registerUser}>
         {(formikProps) => {
           return (
             <Form className="flex flex-col gap-4">

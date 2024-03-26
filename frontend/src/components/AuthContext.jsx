@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react"
+import { axiosInstance, axiosInterceptorsInstance } from "../lib/axiosInstance"
 
 export const AuthContext = createContext({
   user: null,
@@ -13,9 +14,9 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        // const response = await axiosInstance.get("/user/status")
+        const response = await axiosInstance.get("/user/status")
         setInitialLoading(false)
-        // setUser(response.data.user)
+        setUser(response.data.user)
       } catch (error) {
         setInitialLoading(false)
       }
