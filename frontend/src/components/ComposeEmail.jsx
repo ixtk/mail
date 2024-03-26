@@ -1,19 +1,36 @@
-import { Form, Formik, ErrorMessage, Field } from "formik"
+import { Form, Formik, ErrorMessage } from "formik"
+import { useLocation, useNavigate } from "react-router-dom"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Button } from "./ui/button"
 import { Textarea } from "./ui/textarea"
+import { useEffect, useRef } from "react"
+import { axiosInstance } from "../lib/axiosInstance"
 
 export const ComposeEmail = () => {
-  const initialValues = {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const textareaRef = useRef()
+
+  const initialValues = location.state || {
     recipients: "",
     subject: "",
     body: ""
   }
 
+  const sendEmail = async (emailValues) => {
+    const response = await axiosInstance.post("/emails", emailValues)
+    navigate(response.data._id)
+  }
+
+  useEffect(() => {
+    textareaRef.current.focus()
+    textareaRef.current.setSelectionRange(0, 0)
+  }, [])
+
   return (
     <div>
-      <Formik initialValues={initialValues}>
+      <Formik initialValues={initialValues} onSubmit={sendEmail}>
         {(formik) => {
           return (
             <Form
@@ -41,7 +58,12 @@ export const ComposeEmail = () => {
                 <Label className="mb-4 inline-block" htmlFor="subject">
                   Body
                 </Label>
-                <Textarea id="body" {...formik.getFieldProps("body")} />
+                <Textarea
+                  ref={textareaRef}
+                  rows="15"
+                  id="body"
+                  {...formik.getFieldProps("body")}
+                />
                 <ErrorMessage name="body" component="span" />
               </div>
               <Button className="self-end">Send</Button>

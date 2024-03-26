@@ -11,7 +11,7 @@ import {
 import { RootLayout } from "./pages/RootLayout"
 import { AuthContext, AuthContextProvider } from "./components/AuthContext"
 import { useContext, useEffect } from "react"
-import { Email } from "./components/Email"
+import { Email } from "./pages/EmailPage"
 import { ComposeEmail } from "./components/ComposeEmail"
 import { EmailListPage } from "./pages/EmailListPage"
 import { LoginPage } from "./pages/LoginPage"

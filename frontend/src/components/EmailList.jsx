@@ -1,30 +1,50 @@
+import { axiosInstance } from "../lib/axiosInstance"
+import { Skeleton } from "./ui/skeleton"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-const emails = [
-  {
-    from: "alex.doe@example.com",
-    subject: "Weekly Report",
-    date: "2024-03-18T14:00:00Z"
-  },
-  {
-    from: "sam.taylor@example.com",
-    subject: "Project Update",
-    date: "2024-03-18T13:45:00Z"
-  }
-]
-
 export const EmailList = () => {
+  const [emails, setEmails] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const getEmails = async () => {
+      const response = await axiosInstance("/emails/c/inbox")
+      const responseEmails = response.data
+      setEmails(responseEmails)
+      setLoading(false)
+    }
+
+    getEmails()
+  }, [])
+
   return (
     <div className="my-4 divide-y">
+      {loading && (
+        <div className="flex flex-col gap-4">
+          <div className="py-3">
+            <Skeleton className="h-4 w-1/2" />
+          </div>
+          <div className="py-3">
+            <Skeleton className="h-4 w-1/2" />
+          </div>
+        </div>
+      )}
       {emails.map((email) => (
         <Link
-          to="abc"
-          key={email.from}
+          to={email._id}
+          key={email._id}
           className="flex justify-between py-3 gap-4"
         >
-          <div className="font-medium hidden md:block">{email.from}</div>
+          <div className="font-medium hidden md:block">
+            {email.sender.email}
+          </div>
           <div className="">{email.subject}</div>
-          <div className="hidden md:block">{email.date}</div>
+          <div className="hidden md:block">
+            {new Date(email.sentAt).toLocaleDateString("en-US", {
+              dateStyle: "medium"
+            })}
+          </div>
         </Link>
       ))}
     </div>

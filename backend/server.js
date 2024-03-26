@@ -27,7 +27,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24,
       sameSite: true,
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: false
     },
     store: MongoStore.create({
       mongoUrl: "mongodb://127.0.0.1:27017/mail"
@@ -86,41 +86,39 @@ app.delete("/user/logout", async (req, res) => {
   res.sendStatus(204)
 })
 
-app.post("/emails", async (req, res) => {
-  const { recipients, subject, body, replyingTo } = req.body
+app.post("/emails", protectRoute, async (req, res) => {
+  const { recipients, subject, body } = req.body
   const emails = recipients.split(",").map((email) => email.trim())
 
   const recipientUsers = await User.find({ email: { $in: emails } })
 
   const email = await Email.create({
-    sender: "66007ce2b359d00179fc32bd",
+    sender: req.user._id,
     recipients: recipientUsers.map((user) => user.id),
     subject,
-    body,
-    replyingTo: replyingTo ? mongoose.Types.ObjectId(replyingTo) : null
+    body
   })
 
   await email.save()
-  res.status(201).json({ message: "Email sent successfully." })
+  res.status(201).json({ message: "Email sent successfully.", _id: email._id })
 })
 
-app.get("/emails/:mailbox", async (req, res) => {
+app.get("/emails/c/:mailbox", protectRoute, async (req, res) => {
   const { mailbox } = req.params
   let emails
 
   switch (mailbox) {
     case "inbox":
       emails = await Email.find({
-        recipients: "66007ce2b359d00179fc32bd",
-        archived: false
-      })
+        recipients: req.user._id
+      }).populate("sender", "email")
       break
     case "sent":
-      emails = await Email.find({ sender: "66007ce2b359d00179fc32bd" })
+      emails = await Email.find({ sender: req.user._id })
       break
     case "archived":
       emails = await Email.find({
-        recipients: "66007ce2b359d00179fc32bd",
+        recipients: req.user._id,
         archived: true
       })
       break
@@ -129,6 +127,19 @@ app.get("/emails/:mailbox", async (req, res) => {
   }
 
   res.json(emails)
+})
+
+app.get("/emails/:emailId", protectRoute, async (req, res) => {
+  const { emailId } = req.params
+
+  const email = await Email.findOne({
+    _id: emailId,
+    $or: [{ recipients: req.user._id }, { sender: req.user._id }]
+  })
+    .populate("sender")
+    .populate("recipients")
+
+  res.json(email)
 })
 
 app.put("/emails/:id", async (req, res) => {

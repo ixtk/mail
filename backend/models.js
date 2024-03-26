@@ -37,8 +37,8 @@ const emailSchema = new mongoose.Schema({
   archived: {
     type: Boolean,
     default: false
-  },
-  replyingTo: { type: mongoose.Schema.Types.ObjectId, ref: "Email" }
+  }
+  // replyingTo: { type: mongoose.Schema.Types.ObjectId, ref: "Email" }
 })
 
 export const Email = mongoose.model("Email", emailSchema)
