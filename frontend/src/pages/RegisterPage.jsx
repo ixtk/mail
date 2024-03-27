@@ -20,7 +20,7 @@ export const RegisterPage = () => {
   const registerUser = async (registerValues) => {
     const response = await axiosInstance.post("/user/register", registerValues)
     setUser(response.data.user)
-    navigate("/inbox")
+    navigate("/c/inbox")
     console.log(response.data)
   }
 

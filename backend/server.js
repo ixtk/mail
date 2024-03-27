@@ -94,7 +94,7 @@ app.post("/emails", protectRoute, async (req, res) => {
 
   const email = await Email.create({
     sender: req.user._id,
-    recipients: recipientUsers.map((user) => user.id),
+    recipients: recipientUsers.map((user) => user._id),
     subject,
     body
   })

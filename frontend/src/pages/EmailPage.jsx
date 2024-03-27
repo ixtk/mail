@@ -1,19 +1,25 @@
 import { useNavigate, useParams } from "react-router-dom"
 import { Button } from "../components/ui/button"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { axiosInstance } from "../lib/axiosInstance"
 import { Badge } from "../components/ui/badge"
+import { AuthContext } from "../components/AuthContext"
 
 export const Email = () => {
   const { emailCategory, emailId } = useParams()
   const navigate = useNavigate()
   const [email, setEmail] = useState({})
   const [loading, setLoading] = useState(true)
+  const { user } = useContext(AuthContext)
 
+  console.log(email)
   const reply = () => {
     navigate("/compose", {
       state: {
-        recipients: email.recipients.map((r) => r.email).join(","),
+        recipients: [email.sender, ...email.recipients]
+          .filter((r) => r.email !== user.email)
+          .map((r) => r.email)
+          .join(","),
         subject: `Re: ${email.subject}`,
         body: `\n\n----\non ${new Date(email.sentAt).toLocaleDateString(
           "en-US",
@@ -25,7 +31,7 @@ export const Email = () => {
             day: "2-digit",
             month: "long"
           }
-        )}, ${email.sender.email} wrote:\n\n${email.body}\n----\n\n`
+        )}, ${email.sender.email} wrote:\n\n${email.body}`
       }
     })
   }
@@ -35,6 +41,7 @@ export const Email = () => {
       archived: !email.archived
     })
     setEmail({ ...email, archived: response.data.archived })
+    navigate(`/c/${response.data.archived ? "archived" : "inbox"}/${emailId}`)
   }
 
   const formatTextWithNewlines = (text) => {
@@ -76,7 +83,8 @@ export const Email = () => {
             <span>{email.sender.email}</span>
           </li>
           <li>
-            <span className="font-bold">To:</span> <span>bar@example.com</span>
+            <span className="font-bold">To:</span>{" "}
+            <span>{email.recipients.map((r) => r.email).join(", ")}</span>
           </li>
           <li>
             <span>

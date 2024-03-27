@@ -25,7 +25,7 @@ export const EmailList = ({ emailCategory }) => {
 
   return (
     <div className="my-4 divide-y">
-      {loading && (
+      {loading ? (
         <div className="flex flex-col gap-4">
           <div className="py-3">
             <Skeleton className="h-4 w-1/2" />
@@ -34,25 +34,27 @@ export const EmailList = ({ emailCategory }) => {
             <Skeleton className="h-4 w-1/2" />
           </div>
         </div>
+      ) : emails.length === 0 ? (
+        <h2 className="my-6">No emails</h2>
+      ) : (
+        emails.map((email) => (
+          <Link
+            to={`/c/${emailCategory}/${email._id}`}
+            key={email._id}
+            className="flex justify-between py-3 gap-4"
+          >
+            <div className="font-medium hidden md:block">
+              {email.sender.email}
+            </div>
+            <div className="">{email.subject}</div>
+            <div className="hidden md:block">
+              {new Date(email.sentAt).toLocaleDateString("en-US", {
+                dateStyle: "medium"
+              })}
+            </div>
+          </Link>
+        ))
       )}
-      {emails.length === 0 && <h2 className="my-6">No emails</h2>}
-      {emails.map((email) => (
-        <Link
-          to={`/c/${emailCategory}/${email._id}`}
-          key={email._id}
-          className="flex justify-between py-3 gap-4"
-        >
-          <div className="font-medium hidden md:block">
-            {email.sender.email}
-          </div>
-          <div className="">{email.subject}</div>
-          <div className="hidden md:block">
-            {new Date(email.sentAt).toLocaleDateString("en-US", {
-              dateStyle: "medium"
-            })}
-          </div>
-        </Link>
-      ))}
     </div>
   )
 }
