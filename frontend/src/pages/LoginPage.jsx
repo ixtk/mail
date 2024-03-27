@@ -18,7 +18,6 @@ export const LoginPage = () => {
     const response = await axiosInstance.post("/user/login", loginValues)
     setUser(response.data.user)
     setSubmitting(false)
-    console.log(response.data)
   }
 
   return (

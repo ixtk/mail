@@ -112,19 +112,22 @@ app.get("/emails/c/:mailbox", protectRoute, async (req, res) => {
       emails = await Email.find({
         recipients: req.user._id,
         archived: false
-      }).populate("sender", "email")
+      })
+        .sort({ sentAt: -1 })
+        .populate("sender", "email")
       break
     case "sent":
-      emails = await Email.find({ sender: req.user._id }).populate(
-        "sender",
-        "email"
-      )
+      emails = await Email.find({ sender: req.user._id })
+        .sort({ sentAt: -1 })
+        .populate("sender", "email")
       break
     case "archived":
       emails = await Email.find({
         recipients: req.user._id,
         archived: true
-      }).populate("sender", "email")
+      })
+        .sort({ sentAt: -1 })
+        .populate("sender", "email")
       break
     default:
       return res.status(400).json({ error: "Invalid mailbox" })

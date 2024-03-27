@@ -21,7 +21,6 @@ export const RegisterPage = () => {
     const response = await axiosInstance.post("/user/register", registerValues)
     setUser(response.data.user)
     navigate("/c/inbox")
-    console.log(response.data)
   }
 
   return (

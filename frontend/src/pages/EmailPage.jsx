@@ -12,7 +12,6 @@ export const Email = () => {
   const [loading, setLoading] = useState(true)
   const { user } = useContext(AuthContext)
 
-  console.log(email)
   const reply = () => {
     navigate("/compose", {
       state: {

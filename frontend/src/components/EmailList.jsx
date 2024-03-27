@@ -49,7 +49,12 @@ export const EmailList = ({ emailCategory }) => {
             <div className="">{email.subject}</div>
             <div className="hidden md:block">
               {new Date(email.sentAt).toLocaleDateString("en-US", {
-                dateStyle: "medium"
+                hour: "2-digit",
+                hour12: false,
+                minute: "2-digit",
+                weekday: "short",
+                day: "2-digit",
+                month: "short"
               })}
             </div>
           </Link>
