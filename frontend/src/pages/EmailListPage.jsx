@@ -10,7 +10,7 @@ export const EmailListPage = () => {
   return (
     <div>
       <h2 className="text-lg font-bold">{category}</h2>
-      <EmailList />
+      <EmailList emailCategory={emailCategory.toLowerCase()} />
     </div>
   )
 }

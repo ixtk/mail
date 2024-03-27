@@ -110,17 +110,21 @@ app.get("/emails/c/:mailbox", protectRoute, async (req, res) => {
   switch (mailbox) {
     case "inbox":
       emails = await Email.find({
-        recipients: req.user._id
+        recipients: req.user._id,
+        archived: false
       }).populate("sender", "email")
       break
     case "sent":
-      emails = await Email.find({ sender: req.user._id })
+      emails = await Email.find({ sender: req.user._id }).populate(
+        "sender",
+        "email"
+      )
       break
     case "archived":
       emails = await Email.find({
         recipients: req.user._id,
         archived: true
-      })
+      }).populate("sender", "email")
       break
     default:
       return res.status(400).json({ error: "Invalid mailbox" })
@@ -142,25 +146,25 @@ app.get("/emails/:emailId", protectRoute, async (req, res) => {
   res.json(email)
 })
 
-app.put("/emails/:id", async (req, res) => {
+app.patch("/emails/:id", protectRoute, async (req, res) => {
   const { id } = req.params
   const { read, archived } = req.body
 
   const email = await Email.findOne({
     _id: id,
-    user: "66007ce2b359d00179fc32bd"
+    recipients: req.user._id
   })
 
-  if (read !== undefined) {
-    email.read = read
-  }
+  // if (read !== undefined) {
+  //   email.read = read
+  // }
 
   if (archived !== undefined) {
     email.archived = archived
   }
 
-  await email.save()
-  res.sendStatus(204)
+  const updatedEmail = await email.save()
+  return res.json(updatedEmail)
 })
 
 app.listen(3000, async () => {

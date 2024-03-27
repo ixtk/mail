@@ -20,7 +20,7 @@ export const ComposeEmail = () => {
 
   const sendEmail = async (emailValues) => {
     const response = await axiosInstance.post("/emails", emailValues)
-    navigate(response.data._id)
+    navigate(`/c/sent/${response.data._id}`)
   }
 
   useEffect(() => {

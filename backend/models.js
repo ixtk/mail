@@ -38,7 +38,6 @@ const emailSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-  // replyingTo: { type: mongoose.Schema.Types.ObjectId, ref: "Email" }
 })
 
 export const Email = mongoose.model("Email", emailSchema)
