@@ -138,13 +138,19 @@ app.get("/emails/c/:mailbox", protectRoute, async (req, res) => {
 
 app.get("/emails/:emailId", protectRoute, async (req, res) => {
   const { emailId } = req.params
+  let email
 
-  const email = await Email.findOne({
-    _id: emailId,
-    $or: [{ recipients: req.user._id }, { sender: req.user._id }]
-  })
-    .populate("sender")
-    .populate("recipients")
+  try {
+    email = await Email.findOne({
+      _id: emailId,
+      $or: [{ recipients: req.user._id }, { sender: req.user._id }]
+    })
+      .populate("sender")
+      .populate("recipients")
+  } catch (e) {
+    console.log(e.stack)
+    res.status(400).json({ message: e.message })
+  }
 
   res.json(email)
 })

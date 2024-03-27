@@ -57,15 +57,17 @@ export const Email = () => {
       try {
         const response = await axiosInstance(`/emails/${emailId}`)
         const responseEmail = response.data
+        console.log(responseEmail)
         setEmail(responseEmail)
         setLoading(false)
       } catch (er) {
-        console.log(er.message, er.stack)
+        console.log(er.message)
+        navigate("/not-found")
       }
     }
 
     getEmail()
-  }, [emailId])
+  }, [emailId, navigate])
 
   if (loading) {
     return null
