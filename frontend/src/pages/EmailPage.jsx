@@ -1,9 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { Button } from "../components/ui/button"
+import { Button } from "@/components/ui/button"
 import { useContext, useEffect, useState } from "react"
-import { axiosInstance } from "../lib/axiosInstance"
-import { Badge } from "../components/ui/badge"
-import { AuthContext } from "../components/AuthContext"
+import { axiosInstance } from "@/lib/axiosInstance"
+import { Badge } from "@/components/ui/badge"
+import { AuthContext } from "@/components/AuthContext"
+import { formatDate } from "@/lib/utils"
 
 export const Email = () => {
   const { emailCategory, emailId } = useParams()
@@ -20,17 +21,9 @@ export const Email = () => {
           .map((r) => r.email)
           .join(","),
         subject: `Re: ${email.subject}`,
-        body: `\n\n----\non ${new Date(email.sentAt).toLocaleDateString(
-          "en-US",
-          {
-            hour: "2-digit",
-            hour12: false,
-            minute: "2-digit",
-            weekday: "short",
-            day: "2-digit",
-            month: "long"
-          }
-        )}, ${email.sender.email} wrote:\n\n${email.body}`
+        body: `\n\n----\non ${formatDate(email.sentAt)}, ${
+          email.sender.email
+        } wrote:\n\n${email.body}`
       }
     })
   }
@@ -88,16 +81,7 @@ export const Email = () => {
             <span>{email.recipients.map((r) => r.email).join(", ")}</span>
           </li>
           <li>
-            <span>
-              {new Date(email.sentAt).toLocaleDateString("en-US", {
-                hour: "2-digit",
-                hour12: false,
-                minute: "2-digit",
-                weekday: "short",
-                day: "2-digit",
-                month: "long"
-              })}
-            </span>
+            <span>{formatDate(email.sentAt)}</span>
           </li>
         </ul>
         <p className="my-4">{formatTextWithNewlines(email.body)}</p>

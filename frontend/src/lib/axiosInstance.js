@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const config = {
-  baseURL: `http://localhost:3000`,
+  baseURL: import.meta.env.VITE_EXPRESS_URL,
   withCredentials: true
 }
 

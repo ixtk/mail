@@ -1,7 +1,8 @@
-import { axiosInstance } from "../lib/axiosInstance"
-import { Skeleton } from "./ui/skeleton"
+import { axiosInstance } from "@/lib/axiosInstance"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { formatDate } from "@/lib/utils"
 
 export const EmailList = ({ emailCategory }) => {
   const [emails, setEmails] = useState([])
@@ -47,16 +48,7 @@ export const EmailList = ({ emailCategory }) => {
               {email.sender.email}
             </div>
             <div className="">{email.subject}</div>
-            <div className="hidden md:block">
-              {new Date(email.sentAt).toLocaleDateString("en-US", {
-                hour: "2-digit",
-                hour12: false,
-                minute: "2-digit",
-                weekday: "short",
-                day: "2-digit",
-                month: "short"
-              })}
-            </div>
+            <div className="hidden md:block">{formatDate(email.sentAt)}</div>
           </Link>
         ))
       )}

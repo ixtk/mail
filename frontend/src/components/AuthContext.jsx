@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react"
-import { axiosInstance, axiosInterceptorsInstance } from "../lib/axiosInstance"
+import { axiosInstance, axiosInterceptorsInstance } from "@/lib/axiosInstance"
 
 export const AuthContext = createContext({
   user: null,

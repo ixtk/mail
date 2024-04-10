@@ -4,14 +4,17 @@ import bcrypt from "bcrypt"
 import session from "express-session"
 import MongoStore from "connect-mongo"
 import cors from "cors"
+import dotenv from "dotenv"
 
 import { Email, User } from "./models.js"
+
+dotenv.config({ path: "./config/.env" })
 
 const app = express()
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.ALLOWED_ORIGIN,
     credentials: true
   })
 )
@@ -20,17 +23,15 @@ app.use(express.json())
 
 app.use(
   session({
-    secret: "super secret",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      sameSite: true,
-      resave: false,
-      saveUninitialized: false
+      sameSite: true
     },
     store: MongoStore.create({
-      mongoUrl: "mongodb://127.0.0.1:27017/mail"
+      mongoUrl: process.env.MONGODB_URL
     })
   })
 )
@@ -157,18 +158,14 @@ app.get("/emails/:emailId", protectRoute, async (req, res) => {
 
 app.patch("/emails/:id", protectRoute, async (req, res) => {
   const { id } = req.params
-  const { read, archived } = req.body
+  const { archived } = req.body
 
   const email = await Email.findOne({
     _id: id,
     recipients: req.user._id
   })
 
-  // if (read !== undefined) {
-  //   email.read = read
-  // }
-
-  if (archived !== undefined) {
+  if (archived) {
     email.archived = archived
   }
 
@@ -176,8 +173,8 @@ app.patch("/emails/:id", protectRoute, async (req, res) => {
   return res.json(updatedEmail)
 })
 
-app.listen(3000, async () => {
+app.listen(process.env.EXPRESS_PORT, async () => {
   console.log("Server running...")
-  await mongoose.connect("mongodb://localhost:27017/mail")
+  await mongoose.connect(process.env.MONGODB_URL)
   console.log("Connected to the DB...")
 })

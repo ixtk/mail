@@ -4,13 +4,12 @@ import {
   Outlet,
   Route,
   RouterProvider,
-  useNavigate,
   Navigate
 } from "react-router-dom"
 
 import { RootLayout } from "./pages/RootLayout"
 import { AuthContext, AuthContextProvider } from "./components/AuthContext"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { Email } from "./pages/EmailPage"
 import { ComposeEmail } from "./components/ComposeEmail"
 import { EmailListPage } from "./pages/EmailListPage"
@@ -20,30 +19,22 @@ import { NotFoundPage } from "./pages/NotFoundPage"
 
 const ProtectedRoute = () => {
   const { user, initialLoading } = useContext(AuthContext)
-  const navigate = useNavigate()
 
-  useEffect(() => {
-    // Or just use <Navigate />
-    if (initialLoading === false && user === null) {
-      navigate("/login")
-    }
-  }, [user, initialLoading, navigate])
+  if (initialLoading) return null
 
-  return !initialLoading && user ? <Outlet /> : null
+  if (user) return <Outlet />
+
+  return <Navigate to="/login" />
 }
 
 const RedirectIfLoggedIn = () => {
   const { user, initialLoading } = useContext(AuthContext)
 
-  if (!initialLoading) {
-    if (user) {
-      return <Navigate to="/c/inbox" />
-    } else {
-      return <Outlet />
-    }
-  } else {
-    return null
-  }
+  if (initialLoading) return null
+
+  if (user) return <Navigate to="/c/inbox" />
+
+  return <Outlet />
 }
 
 const router = createBrowserRouter(
