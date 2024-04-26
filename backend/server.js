@@ -173,6 +173,13 @@ app.patch("/emails/:id", protectRoute, async (req, res) => {
   return res.json(updatedEmail)
 })
 
+app.delete("/emails/:id", protectRoute, async (req, res) => {
+  const { id } = req.params
+
+  await Email.findByIdAndDelete(id)
+  return res.sendStatus(204)
+})
+
 app.listen(process.env.EXPRESS_PORT, async () => {
   console.log("Server running...")
   await mongoose.connect(process.env.MONGODB_URL)

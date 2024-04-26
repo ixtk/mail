@@ -13,6 +13,11 @@ export const Email = () => {
   const [loading, setLoading] = useState(true)
   const { user } = useContext(AuthContext)
 
+  const deleteEmail = async () => {
+    const response = await axiosInstance.delete(`/emails/${emailId}`)
+    navigate("/c/inbox")
+  }
+
   const reply = () => {
     navigate("/compose", {
       state: {
@@ -95,6 +100,9 @@ export const Email = () => {
             {email.archived ? "Unarchive" : "Archive"}
           </Button>
         )}
+        <Button onClick={deleteEmail} variant="outlineDestructive">
+          Delete
+        </Button>
       </div>
     </div>
   )
