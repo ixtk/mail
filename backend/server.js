@@ -165,9 +165,7 @@ app.patch("/emails/:id", protectRoute, async (req, res) => {
     recipients: req.user._id
   })
 
-  if (archived) {
-    email.archived = archived
-  }
+  email.archived = archived
 
   const updatedEmail = await email.save()
   return res.json(updatedEmail)
