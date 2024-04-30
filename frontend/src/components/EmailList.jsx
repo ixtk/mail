@@ -47,25 +47,29 @@ export const EmailList = ({ emailCategory }) => {
         <h2 className="my-6">No emails</h2>
       ) : (
         emails.map((email) => (
-          <div className="flex justify-between py-3 gap-4" key={email._id}>
-            <Link
-              to={`/c/${emailCategory}/${email._id}`}
-              className="flex justify-between gap-4"
-            >
-              <div className="font-medium hidden md:block">
-                {email.sender.email}
-              </div>
-              <div className="">{email.subject}</div>
-              <div className="hidden md:block">{formatDate(email.sentAt)}</div>
-            </Link>
-            <div>
-              <Button
-                className="p-2 flex items-center h-auto"
-                onClick={() => deleteEmail(email._id)}
-                variant="outlineDestructive"
+          <div className="py-3 gap-4" key={email._id}>
+            <div className="flex gap-4 items-center">
+              <Link
+                to={`/c/${emailCategory}/${email._id}`}
+                className="flex justify-between grow gap-4"
               >
-                <Trash2 size={14} />
-              </Button>
+                <div className="font-medium hidden md:block">
+                  {email.sender.email}
+                </div>
+                <div className="">{email.subject}</div>
+                <div className="hidden md:block">
+                  {formatDate(email.sentAt)}
+                </div>
+              </Link>
+              <div>
+                <Button
+                  className="p-2 flex items-center h-auto"
+                  onClick={() => deleteEmail(email._id)}
+                  variant="outlineDestructive"
+                >
+                  <Trash2 size={14} />
+                </Button>
+              </div>
             </div>
           </div>
         ))
