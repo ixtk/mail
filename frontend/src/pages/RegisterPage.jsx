@@ -33,7 +33,7 @@ export const RegisterPage = () => {
   const registerUser = async (registerValues) => {
     try {
       const response = await axiosInstance.post(
-        "/user/register",
+        "/users/register",
         registerValues
       )
       setUser(response.data.user)

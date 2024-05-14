@@ -14,7 +14,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        const response = await axiosInstance.get("/user/status")
+        const response = await axiosInstance.get("/users/status")
         setInitialLoading(false)
         setUser(response.data.user)
       } catch (error) {

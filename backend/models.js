@@ -3,7 +3,12 @@ import mongoose from "mongoose"
 const userSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true
+    required: true,
+    lowercase: true,
+    unique: true,
+    minLength: 5,
+    maxLength: 45,
+    match: /^\S+@\S+\.\S+$/
   },
   password: {
     type: String,
@@ -14,21 +19,25 @@ const userSchema = new mongoose.Schema({
 const emailSchema = new mongoose.Schema({
   sender: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true
   },
   recipients: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
+      required: true
     }
   ],
   subject: {
     type: String,
-    required: true
+    required: true,
+    minLength: 2
   },
   body: {
     type: String,
-    required: true
+    required: true,
+    minLength: 5
   },
   sentAt: {
     type: Date,

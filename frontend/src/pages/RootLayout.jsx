@@ -17,7 +17,7 @@ export const RootLayout = () => {
   const navigate = useNavigate()
 
   const logoutUser = async () => {
-    await axiosInstance.delete("/user/logout")
+    await axiosInstance.delete("/users/logout")
     setUser(null)
     navigate("/")
   }

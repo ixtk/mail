@@ -26,7 +26,7 @@ export const LoginPage = () => {
 
   const loginUser = async (loginValues, { setSubmitting }) => {
     try {
-      const response = await axiosInstance.post("/user/login", loginValues)
+      const response = await axiosInstance.post("/users/login", loginValues)
       setUser(response.data.user)
       setSubmitting(false)
     } catch (error) {
