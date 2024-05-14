@@ -6,11 +6,17 @@ import {
   getEmail,
   getEmailCategory
 } from "../controllers/emailControllers.js"
-import { protectRoute } from "../middleware.js"
+import { protectRoute, validateBody } from "../middleware.js"
+import { emailComposeSchema } from "../schema.js"
 
 export const emailRouter = Router()
 
-emailRouter.post("/", protectRoute, createEmail)
+emailRouter.post(
+  "/",
+  protectRoute,
+  validateBody(emailComposeSchema),
+  createEmail
+)
 emailRouter.get("/c/:mailbox", protectRoute, getEmailCategory)
 emailRouter.get("/:emailId", protectRoute, getEmail)
 emailRouter.patch("/:id", protectRoute, archiveEmail)

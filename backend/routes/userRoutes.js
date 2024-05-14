@@ -5,11 +5,12 @@ import {
   register,
   logout
 } from "../controllers/userControllers.js"
-import { protectRoute } from "../middleware.js"
+import { protectRoute, validateBody } from "../middleware.js"
+import { loginSchema, registerSchema } from "../schema.js"
 
 export const userRouter = Router()
 
 userRouter.get("/status", protectRoute, getStatus)
-userRouter.post("/register", register)
-userRouter.post("/login", login)
+userRouter.post("/register", validateBody(registerSchema), register)
+userRouter.post("/login", validateBody(loginSchema), login)
 userRouter.delete("/logout", logout)

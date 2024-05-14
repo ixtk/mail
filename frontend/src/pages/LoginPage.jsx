@@ -30,7 +30,7 @@ export const LoginPage = () => {
       setUser(response.data.user)
       setSubmitting(false)
     } catch (error) {
-      setErr("Something went wrong...")
+      setErr(error.response?.data?.message ?? error.message)
     }
   }
 

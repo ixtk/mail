@@ -39,7 +39,7 @@ export const RegisterPage = () => {
       setUser(response.data.user)
       navigate("/c/inbox")
     } catch (error) {
-      setErr("Something went wrong...")
+      setErr(error.response?.data?.message ?? error.message)
     }
   }
 

@@ -31,10 +31,5 @@ const validateSchema = (schema, target) => {
   }
 }
 
-export const validateBody = (schema) => {
-  validateSchema(schema, "body")
-}
-
-export const validateParams = (schema) => {
-  validateSchema(schema, "params")
-}
+export const validateBody = (schema) => validateSchema(schema, "body")
+export const validateParams = (schema) => validateSchema(schema, "params")

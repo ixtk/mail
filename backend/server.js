@@ -4,6 +4,7 @@ import session from "express-session"
 import MongoStore from "connect-mongo"
 import cors from "cors"
 import dotenv from "dotenv"
+import morgan from 'morgan'
 
 import { userRouter } from "./routes/userRoutes.js"
 import { emailRouter } from "./routes/emailRoutes.js"
@@ -21,6 +22,7 @@ app.use(
 )
 
 app.use(express.json())
+app.use(morgan('dev'))
 
 app.use(
   session({

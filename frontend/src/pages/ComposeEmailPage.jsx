@@ -22,7 +22,7 @@ const emailComposeSchema = object({
     })
 })
 
-export const ComposeEmail = () => {
+export const ComposeEmailPage = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const textareaRef = useRef()
