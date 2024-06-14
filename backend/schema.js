@@ -11,7 +11,6 @@ const baseAuthSchema = object({
 
 export const loginSchema = baseAuthSchema
 export const registerSchema = baseAuthSchema.shape({
-  username: string().required().trim().min(3).max(40),
   confirmPassword: string()
     .oneOf([ref("password")], "Passwords do not match")
     .required()

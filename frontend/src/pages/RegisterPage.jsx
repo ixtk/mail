@@ -1,6 +1,10 @@
 import { Form, Formik, ErrorMessage } from "formik"
 import { Link, useNavigate } from "react-router-dom"
-import { axiosInstance } from "@/lib/axiosInstance"
+import {
+  axiosInstance,
+  setCsrfToken,
+  axiosInterceptorsInstance
+} from "@/lib/axiosInstance"
 import { useContext, useState } from "react"
 import { AuthContext } from "@/components/AuthContext"
 import { Button } from "@/components/ui/button"
@@ -36,6 +40,8 @@ export const RegisterPage = () => {
         "/users/register",
         registerValues
       )
+      setCsrfToken(axiosInstance, response.headers["x-csrf-token"])
+      setCsrfToken(axiosInterceptorsInstance, response.headers["x-csrf-token"])
       setUser(response.data.user)
       navigate("/c/inbox")
     } catch (error) {

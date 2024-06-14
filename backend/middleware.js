@@ -33,3 +33,12 @@ const validateSchema = (schema, target) => {
 
 export const validateBody = (schema) => validateSchema(schema, "body")
 export const validateParams = (schema) => validateSchema(schema, "params")
+
+export const csrfProtection = (req, res, next) => {
+  const csrfToken = req.get("X-Csrf-Token")
+
+  if (csrfToken !== req.session.csrfToken) {
+    return res.status(403).send({ message: "Invalid CSRF token" })
+  }
+  next()
+}

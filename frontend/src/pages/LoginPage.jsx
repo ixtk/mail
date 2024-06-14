@@ -1,6 +1,10 @@
 import { Form, Formik, ErrorMessage } from "formik"
 import { Link } from "react-router-dom"
-import { axiosInstance } from "@/lib/axiosInstance"
+import {
+  axiosInstance,
+  axiosInterceptorsInstance,
+  setCsrfToken
+} from "@/lib/axiosInstance"
 import { useContext, useState } from "react"
 import { AuthContext } from "@/components/AuthContext"
 import { Button } from "@/components/ui/button"
@@ -27,6 +31,8 @@ export const LoginPage = () => {
   const loginUser = async (loginValues, { setSubmitting }) => {
     try {
       const response = await axiosInstance.post("/users/login", loginValues)
+      setCsrfToken(axiosInstance, response.headers["x-csrf-token"])
+      setCsrfToken(axiosInterceptorsInstance, response.headers["x-csrf-token"])
       setUser(response.data.user)
       setSubmitting(false)
     } catch (error) {

@@ -17,3 +17,10 @@ axiosInterceptorsInstance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export const setCsrfToken = (inputInstance, csrfToken) => {
+  inputInstance.defaults.headers.post["X-CSRF-Token"] = csrfToken
+  inputInstance.defaults.headers.patch["X-CSRF-Token"] = csrfToken
+  inputInstance.defaults.headers.put["X-CSRF-Token"] = csrfToken
+  inputInstance.defaults.headers.delete["X-CSRF-Token"] = csrfToken
+}

@@ -4,7 +4,7 @@ import session from "express-session"
 import MongoStore from "connect-mongo"
 import cors from "cors"
 import dotenv from "dotenv"
-import morgan from 'morgan'
+import morgan from "morgan"
 
 import { userRouter } from "./routes/userRoutes.js"
 import { emailRouter } from "./routes/emailRoutes.js"
@@ -17,12 +17,13 @@ const app = express()
 app.use(
   cors({
     origin: process.env.ALLOWED_ORIGIN,
-    credentials: true
+    credentials: true,
+    exposedHeaders: ["x-csrf-token"]
   })
 )
 
 app.use(express.json())
-app.use(morgan('dev'))
+app.use(morgan("dev"))
 
 app.use(
   session({
