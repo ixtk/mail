@@ -22,8 +22,10 @@ app.use(
   })
 )
 
+app.set("trust proxy", 1)
+
 app.use(express.json())
-app.use(morgan("dev"))
+app.use(morgan(process.env.NODE_ENV === "development" ? "dev" : "combined"))
 
 app.use(
   session({
@@ -32,7 +34,8 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      sameSite: true
+      sameSite: "None",
+      secure: process.env.NODE_ENV === "production"
     },
     store: MongoStore.create({
       mongoUrl: process.env.MONGODB_URL
@@ -46,7 +49,10 @@ app.use("/emails", emailRouter)
 app.use(handleError)
 
 app.listen(process.env.EXPRESS_PORT, async () => {
-  console.log("Server running...")
+  console.log(
+    `Running in ${process.env.NODE_ENV} mode on port ${process.env.EXPRESS_PORT}`
+  )
+
   await mongoose.connect(process.env.MONGODB_URL)
   console.log("Connected to the DB...")
 })
