@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const config = {
-  baseURL: import.meta.env.VITE_EXPRESS_URL,
+  baseURL: '/api',
   withCredentials: true
 }
 
