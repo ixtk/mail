@@ -31,6 +31,7 @@ export const LoginPage = () => {
   const loginUser = async (loginValues, { setSubmitting }) => {
     try {
       const response = await axiosInstance.post("/users/login", loginValues)
+      console.log('login response:', response)
       setCsrfToken(axiosInstance, response.headers["x-csrf-token"])
       setCsrfToken(axiosInterceptorsInstance, response.headers["x-csrf-token"])
       setUser(response.data.user)
